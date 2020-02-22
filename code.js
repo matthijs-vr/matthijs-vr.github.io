@@ -1,4 +1,3 @@
-//Schrijf hier je JavaScript-code
 let totalseconds = 0;
 var minutes;
 var seconds;
