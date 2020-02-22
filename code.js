@@ -1,4 +1,3 @@
-//Schrijf hier je JavaScript-code
 let totalseconds = 0;
 var minutes;
 var seconds;
@@ -181,7 +180,10 @@ function move(){
       nextheadcol = headcol-1
     }
   }
-  movesnake(nextheadrow, nextheadcol);
+  dead = movesnake(nextheadrow, nextheadcol);
+  if (dead == 1) {
+    return;
+  }
   headrow = nextheadrow
   headcol = nextheadcol
   draw_board(board);
@@ -217,7 +219,7 @@ function movesnake(nextheadrow, nextheadcol) {
     movetail(headrow, headcol, lowesttailnumber);
   } else {
     death();
-    return;
+    return 1;
   }
 }
 
