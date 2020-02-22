@@ -1,5 +1,31 @@
 /* Schrijf hier je CSS */
-.boardclass{
+.boardclass0{
+  position: center;
+  float: center;
+  border: 2px solid black;
+  text-align: center;
+  border-spacing: 2px;
+  color: white;
+  background-color: #D8D8D8;
+  font-size: 20px;
+  width: 200px;
+  height: 200px;
+}
+
+.boardclass1{
+  position: center;
+  float: center;
+  border: 2px solid black;
+  text-align: center;
+  border-spacing: 3px;
+  color: white;
+  background-color: #D8D8D8;
+  font-size: 20px;
+  width: 400px;
+  height: 400px;
+}
+
+.boardclass2{
   position: center;
   float: center;
   border: 2px solid black;
@@ -8,8 +34,25 @@
   color: white;
   background-color: #D8D8D8;
   font-size: 20px;
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
+}
+
+.boardclass3{
+  position: center;
+  float: center;
+  border: 2px solid black;
+  text-align: center;
+  border-spacing: 4px;
+  color: white;
+  background-color: #D8D8D8;
+  font-size: 20px;
+  width: 800px;
+  height: 800px;
+}
+
+.length{
+  float: right;
 }
 
 .button{
@@ -31,13 +74,7 @@
   font-size: 50px;
   border-radius: 15px;
   text-align: center;
-}
-
-.difficulty{
-  border-radius: 5px;
-  border: 5px solid grey;
-  background-color: grey;
-  width: 100px;
+  width: 280px;
 }
 
 .emptytile{
@@ -56,6 +93,20 @@
 
 .food{
   background-color: #FF2828;
+  font-size: 0px;
+  width: 2.5em;
+  height: 2.5em;
+}
+
+.deadTile{
+  background-color: #B7000F;
+  font-size: 0px;
+  width: 2.5em;
+  height: 2.5em;
+}
+
+.deadSnake{
+  background-color: #7F000A;
   font-size: 0px;
   width: 2.5em;
   height: 2.5em;

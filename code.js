@@ -18,6 +18,8 @@ var playing = false;
 
 var currentDirection; //1 is top, 2 is right, 3 is down, 4 is left
 var currentDifficulty = 0; //0 is easy, 1 is normal, 2 is hard, 3 is insane
+var currentSize = 2;
+var currentLength;
 
 function time(){
   if (!playing) {
@@ -38,13 +40,11 @@ function time(){
 
 window.onload = function() {
   generateboard();
-  let difficulty_html = "<button onclick=\"difficulty()\" class=\"difficulty\">Easy</button>"
-  let button_html = "<button onclick=\"reset()\" class=\"button\">New game</button>"
-  document.getElementById("buttons_container").innerHTML = "<center>" + button_html + "<div class=\"division\"></div>" + difficulty_html + "</center>"
+  changedifficulty("Easy");
 }
 
 function generateboard(){
-  board =             [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  board =             [[400,399,398,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -53,8 +53,8 @@ function generateboard(){
                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0,0,2,400,0,0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0,0,398,399,0,0,0,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -72,11 +72,13 @@ function reset(){
   time();
   generateboard();
   generatefood(board);
-  headrow = 9;
-  headcol = 9;
+  headrow = 0;
+  headcol = 3;
   lowesttailnumber = 398;
   playing = true;
-  currentDirection = 1;
+  currentDirection = 2;
+  currentLength = 4;
+  document.getElementById("length").innerHTML = "Length: " + currentLength;
 }
 
 function generate_board_html(board){
@@ -97,7 +99,7 @@ function generate_board_html(board){
     row_html += "</tr>";
     board_inner_html += row_html;
   }
-  return "<table class=\"boardclass\">"+board_inner_html+"</table>";
+  return "<table class=\"boardclass" + currentSize + "\">"+board_inner_html+"</table>";
 }
 
 function draw_board(board){
@@ -199,6 +201,8 @@ function movesnake(nextheadrow, nextheadcol) {
       board[headrow][headcol-1] = 2;
     }
     generatefood(board);
+    currentLength = 402 - lowesttailnumber;
+    document.getElementById("length").innerHTML = "Length: " + currentLength;
   } else if (board[nextheadrow][nextheadcol] == 0) {
     board[headrow][headcol] = lowesttailnumber;
     if (currentDirection == 1) {
@@ -277,12 +281,42 @@ function difficulty() {
   }
   clearInterval(difficultyInterval)
   difficultyInterval = setInterval(move, intervaltime);
-  let difficulty_html = "<button onclick=\"difficulty()\" class=\"difficulty\">" + currentDifficultytext + "</button>"
-  let button_html = "<button onclick=\"reset()\" class=\"button\">New game</button>"
-  document.getElementById("buttons_container").innerHTML = "<center>" + button_html + "<div class=\"division\"></div>" + difficulty_html + "</center>"
+  changedifficulty(currentDifficultytext);
+}
+
+function changedifficulty(currentDifficultytext) {
+  let difficulty_html = "<button onclick=\"difficulty()\" class=\"button\">" + currentDifficultytext + "</button>"
+  let button_html = "<button onclick=\"size()\" class=\"button\">Change size</button><div class=\"division\"></div><button onclick=\"reset()\" class=\"button\">New game</button><div class=\"division\"></div>"
+  document.getElementById("buttons_container").innerHTML = "<center>" + button_html + difficulty_html + "</center>"
+}
+
+function size(){
+  currentSize++;
+  if (currentSize == 4) {
+    currentSize = 0;
+  }
+  draw_board(board);
 }
 
 function death(){
-  alert("You died!");
+  let board_inner_html = "";
+  for (let i = 0; i < board.length; i++){
+    let row_html = "";
+    for (let j = 0; j < board[i].length; j++){
+      if (board[i][j] == 0){
+        row_html += "<td class=\"deadTile\">" + board[i][j] + "</td>";
+      }else if (board[i][j] == 1) {
+        row_html += "<td class=\"deadTile\">" + board[i][j] + "</td>";
+      }else if (board[i][j] == 2) {
+        row_html += "<td class=\"deadSnake\">" + board[i][j] + "</td>";
+      }else{
+        row_html += "<td class=\"deadSnake\">" + board[i][j] + "</td>";
+      }
+    }
+    row_html += "</tr>";
+    board_inner_html += row_html;
+  }
+  let board_html = "<table class=\"boardclass" + currentSize + "\">"+board_inner_html+"</table>";
+  document.getElementById("board_container").innerHTML = board_html;
   playing = false;
 }
