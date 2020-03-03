@@ -13,12 +13,15 @@ var lowesttailnumber;
 
 var board;
 
+var started = false;
 var playing = false;
 
 var currentDirection; //1 is top, 2 is right, 3 is down, 4 is left
 var currentDifficulty = 0; //0 is easy, 1 is normal, 2 is hard, 3 is insane
+var currentDifficultytext = "Easy";
 var currentSize = 2;
 var currentLength;
+var pausebuttontext = "Pause";
 
 function time(){
   if (!playing) {
@@ -75,8 +78,13 @@ function reset(){
   headcol = 3;
   lowesttailnumber = 398;
   playing = true;
+  started = true;
   currentDirection = 2;
   currentLength = 4;
+  clearInterval(difficultyInterval);
+  difficultyInterval = setInterval(move, intervaltime);
+  pausebuttontext = "Pause"
+  changedifficulty(currentDifficultytext);
   document.getElementById("length").innerHTML = "Length: " + currentLength;
 }
 
@@ -267,7 +275,6 @@ function difficulty() {
   if (currentDifficulty == 4) {
     currentDifficulty = 0;
   }
-  var currentDifficultytext;
   if (currentDifficulty == 0) {
     currentDifficultytext = "Easy"
     intervaltime = 400;
@@ -281,14 +288,12 @@ function difficulty() {
     currentDifficultytext = "Insane"
     intervaltime = 100;
   }
-  clearInterval(difficultyInterval)
-  difficultyInterval = setInterval(move, intervaltime);
   changedifficulty(currentDifficultytext);
 }
 
 function changedifficulty(currentDifficultytext) {
   let difficulty_html = "<button onclick=\"difficulty()\" class=\"button\">" + currentDifficultytext + "</button>"
-  let button_html = "<button onclick=\"size()\" class=\"button\">Change size</button><div class=\"division\"></div><button onclick=\"reset()\" class=\"button\">New game</button><div class=\"division\"></div>"
+  let button_html = "<button onclick=\"size()\" class=\"button\">Change size</button><div class=\"division\"></div><button onclick=\"reset()\" class=\"button\">New game</button><div class=\"division\"></div><button onclick=\"pause()\" class=\"button\">" + pausebuttontext + "</button><div class=\"division\"></div>"
   document.getElementById("buttons_container").innerHTML = "<center>" + button_html + difficulty_html + "</center>"
 }
 
@@ -298,6 +303,23 @@ function size(){
     currentSize = 0;
   }
   draw_board(board);
+}
+
+function pause(){
+  if (!started) {
+    return;
+  }
+  if (playing) {
+    clearInterval(difficultyInterval);
+    playing = false;
+    pausebuttontext = "Play";
+    changedifficulty(currentDifficultytext);
+  } else {
+    difficultyInterval = setInterval(move, intervaltime);
+    pausebuttontext = "Pause"
+    playing = true;
+    changedifficulty(currentDifficultytext);
+  }
 }
 
 function death(){
@@ -321,4 +343,5 @@ function death(){
   let board_html = "<table class=\"boardclass" + currentSize + "\">"+board_inner_html+"</table>";
   document.getElementById("board_container").innerHTML = board_html;
   playing = false;
+  started = false;
 }
